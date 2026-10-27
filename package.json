@@ -1,0 +1,12 @@
+{
+  "name": "loop-mind",
+  "private": true,
+  "version": "0.0.0",
+  "description": "LOOP-MIND — AI Recruitment Agent and Closed-Loop Campus Recruitment Intelligence Platform.",
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "format:frontend": "npm --prefix frontend run format"
+  }
+}

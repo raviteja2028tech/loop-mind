@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "LOOP-MIND",
+    "slug": "loop-mind-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0F1317",
+    "splash": {
+      "backgroundColor": "#0F1317"
+    },
+    "android": {
+      "backgroundColor": "#0F1317"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

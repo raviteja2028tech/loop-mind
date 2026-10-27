@@ -1,0 +1,5 @@
+# LOOP-MIND dev/test tooling — spec.md §25 (Pytest, Ruff).
+-r requirements.txt
+pytest==9.1.1
+httpx==0.28.1
+ruff==0.16.7

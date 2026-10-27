@@ -1,0 +1,742 @@
+/* ==========================================================================
+   LOOP-MIND — Graphite Ink Theme
+   Centralized global design system. See spec.md → "LOOP-MIND — MASTER VISUAL
+   & STYLING SPECIFICATION" (sections 1-33). This file is the single source
+   of visual truth for every route/portal — do not create a second theme.
+   ========================================================================== */
+
+@import "tailwindcss";
+
+/* Feeds the exact Graphite Ink palette into Tailwind's utility generator
+   (bg-bg, text-text-mute, border-border-hi, etc.) while §2 below keeps the
+   literal --token names the spec itself uses. */
+@theme {
+  --color-bg: #0f1317;
+  --color-chrome: #12171b;
+  --color-surface: #161c21;
+  --color-row-alt: #1a2126;
+  --color-raised: #1d242a;
+
+  --color-border: #232b31;
+  --color-border-hi: #2c353b;
+
+  --color-text: #f2f5f4;
+  --color-text-soft: #c9d2cf;
+  --color-text-mute: #8a9591;
+
+  --color-accent: #6fd3c0;
+  --color-accent-soft: #97e2d4;
+  --color-accent-deep: #3f8478;
+
+  --color-warn: #e0a86b;
+  --color-danger: #e77e72;
+
+  --font-sans: "Space Grotesk", Helvetica, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* ---- §2-5: exact token names from the source specification ---- */
+:root {
+  --bg: var(--color-bg);
+  --chrome: var(--color-chrome);
+  --surface: var(--color-surface);
+  --row-alt: var(--color-row-alt);
+  --raised: var(--color-raised);
+  --scrim: rgba(9, 12, 14, 0.72);
+
+  --border: var(--color-border);
+  --border-hi: var(--color-border-hi);
+
+  --text: var(--color-text);
+  --text-soft: var(--color-text-soft);
+  --text-mute: var(--color-text-mute);
+
+  --accent: var(--color-accent);
+  --accent-soft: var(--color-accent-soft);
+  --accent-deep: var(--color-accent-deep);
+  --accent-wash: rgba(111, 211, 192, 0.14);
+
+  --warn: var(--color-warn);
+  --warn-wash: rgba(224, 168, 107, 0.14);
+
+  --danger: var(--color-danger);
+  --danger-wash: rgba(231, 126, 114, 0.14);
+
+  --radius: 10px;
+  --radius-lg: 14px;
+  --ring: 0 0 0 3px rgba(111, 211, 192, 0.25);
+
+  color-scheme: dark;
+}
+
+/* All custom rules below live inside Tailwind's cascade layers (base for
+ * bare element selectors, components for the .lm-* component classes) so
+ * that a Tailwind utility composed onto the same element (e.g.
+ * `className="lm-input w-16"`) always wins, matching normal Tailwind
+ * behavior. Unlayered CSS beats layered CSS regardless of source order,
+ * so leaving these unlayered — as an earlier version of this file did —
+ * silently breaks any element that mixes an .lm-* class with a sizing/
+ * layout utility. */
+
+@layer base {
+  /* ---- §6-7: base typography ---- */
+  html,
+  body,
+  #root {
+    min-height: 100vh;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 400 15px/1.55 var(--font-sans);
+    text-wrap: pretty;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 0;
+  }
+  h1 {
+    font-size: 34px;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  /* ---- §27: scrollbars ---- */
+  * {
+    scrollbar-color: var(--border-hi) var(--bg);
+    scrollbar-width: thin;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--border-hi);
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #3a454c;
+  }
+
+  /* ---- §28: focus & accessibility ---- */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+    border-radius: 6px;
+  }
+
+  /* ---- §31: print exception (the only defined white-background case) ---- */
+  @media print {
+    body,
+    html {
+      background: #fff;
+      color: #111;
+    }
+    .lm-navbar,
+    .lm-sidebar,
+    .lm-footer {
+      display: none !important;
+    }
+    .lm-card,
+    .lm-stat,
+    .lm-table-wrap {
+      background: #fff !important;
+      border-color: #ddd !important;
+      color: #111 !important;
+    }
+  }
+}
+
+@layer components {
+  /* ---- §8-9: application shell + responsive rule ---- */
+  .lm-shell {
+    display: grid;
+    grid-template-columns: 224px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "nav nav"
+      "side main"
+      "foot foot";
+    min-height: 100vh;
+    background: var(--bg);
+  }
+  .lm-shell__nav {
+    grid-area: nav;
+  }
+  .lm-shell__side {
+    grid-area: side;
+  }
+  .lm-shell__main {
+    grid-area: main;
+    min-width: 0;
+  }
+  .lm-shell__foot {
+    grid-area: foot;
+  }
+
+  @media (max-width: 880px) {
+    .lm-shell {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "nav"
+        "side"
+        "main"
+        "foot";
+    }
+    /* A sidebar is how a page's sections stay reachable (e.g. My Profile's
+       12 sections) — hiding it outright would remove access to everything
+       but whatever the main pane happens to show, changing the page's
+       information architecture rather than just its layout. Below the
+       two-column breakpoint it becomes a horizontally-scrollable strip
+       instead of a vertical column. */
+    .lm-shell__side {
+      display: block;
+      max-width: 100vw;
+      overflow-x: auto;
+    }
+    .lm-sidebar {
+      flex-direction: row;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+    }
+    .lm-sidebar__item {
+      flex: none;
+      white-space: nowrap;
+    }
+    .lm-sidebar__label {
+      display: none;
+    }
+  }
+
+  /* Public/portal-less pages (e.g. the landing page) have no sidebar at any
+     width — spec.md §4.3/§25: "The sidebar is not relevant to this public
+     landing page." */
+  .lm-shell--no-sidebar {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "nav"
+      "main"
+      "foot";
+  }
+  .lm-shell--no-sidebar .lm-shell__side {
+    display: none;
+  }
+
+  /* ---- §10-11: navbar + nav links ---- */
+  .lm-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    gap: 22px;
+  }
+  .lm-navbar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .lm-navbar__mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: var(--accent);
+    flex: none;
+  }
+  .lm-navbar__links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  /* Student Portal — Right-Side Navigation Requirement: pushes the nav
+     links flush to the right edge of the navbar, opposite the brand.
+     Opt-in modifier (via Navbar's `linksAlign="end"`) so the default
+     behavior — used by the Recruiter Portal and everywhere else — is
+     completely unchanged. */
+  .lm-navbar__links--end {
+    margin-left: auto;
+  }
+  .lm-nav-link {
+    color: var(--text-mute);
+    font-size: 13.5px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 120ms ease;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+  .lm-nav-link:hover {
+    background: var(--surface);
+    color: var(--text-soft);
+  }
+  .lm-nav-link.is-active {
+    background: var(--raised);
+    color: var(--text);
+  }
+
+  /* ---- §12: sidebar ---- */
+  .lm-sidebar {
+    background: var(--chrome);
+    border-right: 1px solid var(--border);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .lm-sidebar__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-mute);
+    padding: 8px 8px 4px;
+  }
+  .lm-sidebar__item {
+    color: var(--text-soft);
+    font-size: 13.5px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 120ms ease;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+  .lm-sidebar__item:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+  .lm-sidebar__item.is-active {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 500;
+  }
+
+  /* ---- §13: main content ---- */
+  .lm-main {
+    background: var(--bg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+    /* Landing Page — Hero Section Alignment: a CSS Grid item stretched by
+       the shell's default `align-items: stretch` (`.lm-shell`'s "main" row
+       track) has a definite height its own children's percentages can
+       resolve against — this is what actually lets a page's own
+       `flex-1 justify-center` content (e.g. LandingPage's hero wrapper)
+       vertically center within the full available viewport height rather
+       than only shrinking to its own content height. Content-heavy pages
+       are unaffected: their natural content height already meets or
+       exceeds this minimum, so nothing visually changes for them. */
+    min-height: 100%;
+  }
+
+  /* ---- §14: footer ---- */
+  .lm-footer {
+    background: var(--chrome);
+    border-top: 1px solid var(--border);
+    padding: 16px 20px;
+    font-size: 12px;
+    color: var(--text-mute);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .lm-footer__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .lm-footer a,
+  .lm-footer button.lm-footer__link {
+    color: var(--text-mute);
+    text-decoration: none;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+  .lm-footer a:hover,
+  .lm-footer button.lm-footer__link:hover {
+    color: var(--text-soft);
+  }
+
+  /* ---- §15: cards ---- */
+  .lm-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .lm-card--flat {
+    background: var(--chrome);
+  }
+  .lm-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* ---- §16: statistics ---- */
+  .lm-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .lm-stat__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+  }
+  .lm-stat__value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .lm-stat__value--accent {
+    color: var(--accent);
+  }
+
+  /* ---- §17: buttons ---- */
+  .lm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font: 500 13.5px/1 var(--font-sans);
+    transition: 120ms ease;
+    cursor: pointer;
+  }
+  .lm-btn:disabled,
+  .lm-btn[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .lm-btn--primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .lm-btn--primary:hover:not(:disabled) {
+    background: var(--accent-soft);
+  }
+  .lm-btn--ghost {
+    background: transparent;
+    color: var(--text-soft);
+    border-color: var(--border-hi);
+  }
+  .lm-btn--ghost:hover:not(:disabled) {
+    background: var(--raised);
+    color: var(--text);
+  }
+  .lm-btn--danger {
+    background: var(--danger-wash);
+    color: var(--danger);
+    border-color: var(--danger);
+  }
+
+  /* ---- §18: badges / pills ---- */
+  .lm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .lm-badge--ok {
+    background: var(--accent-wash);
+    color: var(--accent-soft);
+  }
+  .lm-badge--hold {
+    background: var(--warn-wash);
+    color: var(--warn);
+  }
+  .lm-badge--rejected {
+    background: var(--danger-wash);
+    color: var(--danger);
+  }
+  .lm-badge--neutral {
+    background: var(--raised);
+    color: var(--text-mute);
+  }
+
+  /* ---- §19: forms ---- */
+  .lm-label {
+    display: block;
+    font-size: 12.5px;
+    color: var(--text-mute);
+    margin-bottom: 6px;
+  }
+  .lm-input,
+  .lm-select,
+  .lm-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--raised);
+    color: var(--text);
+    border: 1px solid var(--border-hi);
+    border-radius: 8px;
+    font: 400 13.5px/1.4 var(--font-sans);
+    transition: 120ms ease;
+  }
+  .lm-input::placeholder,
+  .lm-textarea::placeholder {
+    color: var(--text-mute);
+  }
+  .lm-input:focus,
+  .lm-select:focus,
+  .lm-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: var(--ring);
+  }
+  .lm-input[aria-invalid="true"],
+  .lm-textarea[aria-invalid="true"] {
+    border-color: var(--danger);
+  }
+
+  /* ---- §20: upload / dropzone ---- */
+  .lm-dropzone {
+    padding: 26px;
+    background: transparent;
+    border: 1px dashed var(--border-hi);
+    border-radius: var(--radius);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-mute);
+    transition: 120ms ease;
+    cursor: pointer;
+  }
+  .lm-dropzone:hover,
+  .lm-dropzone.is-active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-wash);
+  }
+
+  /* ---- §21: tables ---- */
+  .lm-table-wrap {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    overflow-x: auto;
+  }
+  .lm-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .lm-table thead th {
+    background: var(--chrome);
+    padding: 9px 14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    text-align: left;
+    white-space: nowrap;
+  }
+  .lm-table tbody td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text-soft);
+    font-size: 13.5px;
+  }
+  .lm-table tbody tr {
+    background: var(--surface);
+  }
+  .lm-table tbody tr:nth-child(even) {
+    background: var(--row-alt);
+  }
+  .lm-table tbody tr:hover {
+    background: var(--raised);
+  }
+
+  /* ---- §22: progress indicators ---- */
+  .lm-progress-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .lm-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 200ms ease;
+  }
+
+  /* ---- §23: modal & popover ---- */
+  .lm-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: var(--scrim);
+    backdrop-filter: blur(2px);
+  }
+  .lm-modal {
+    width: min(560px, calc(100vw - 32px));
+    max-height: min(86vh, 760px);
+    overflow-y: auto;
+    background: var(--raised);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
+  .lm-popover {
+    background: var(--raised);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius);
+    padding: 6px;
+  }
+
+  /* ---- §24: React Flow ---- */
+  .react-flow {
+    background: var(--bg);
+  }
+  .react-flow__edge-path {
+    stroke: var(--border-hi);
+    stroke-width: 1.5;
+  }
+  .react-flow__edge.animated .react-flow__edge-path {
+    stroke: var(--accent);
+  }
+  .react-flow__controls,
+  .react-flow__minimap {
+    background: var(--chrome) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+  }
+  .lm-flow-node {
+    min-width: 168px;
+    padding: 10px 12px;
+    background: var(--raised);
+    border: 1px solid var(--border-hi);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-soft);
+  }
+  .lm-flow-node[data-state="pending"] {
+    border-color: var(--border-hi);
+    color: var(--text-mute);
+  }
+  .lm-flow-node[data-state="running"] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .lm-flow-node[data-state="completed"] {
+    border-color: var(--accent-deep);
+    color: var(--accent-soft);
+  }
+  .lm-flow-node[data-state="paused"] {
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+  .lm-flow-node[data-state="approved"] {
+    border-color: var(--accent);
+    color: var(--accent-soft);
+  }
+  .lm-flow-node[data-state="failed"],
+  .lm-flow-node[data-state="rejected"] {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  /* ---- §25: Recharts ---- */
+  .lm-chart-well {
+    background: var(--chrome);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+  .lm-chart-well .recharts-cartesian-grid-horizontal line,
+  .lm-chart-well .recharts-cartesian-grid-vertical line {
+    stroke: var(--border);
+  }
+  .lm-chart-well .recharts-cartesian-axis-line,
+  .lm-chart-well .recharts-cartesian-axis-tick-line {
+    stroke: var(--border-hi);
+  }
+  .lm-chart-well .recharts-text {
+    fill: var(--text-mute);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .lm-chart-tooltip {
+    background: var(--raised);
+    border: 1px solid var(--border-hi);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 8px 10px;
+    font-size: 12.5px;
+  }
+
+  /* ---- §26: public job / landing pages ---- */
+  .lm-public-page {
+    background: var(--bg);
+    min-height: 100vh;
+  }
+  .lm-public-content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+}

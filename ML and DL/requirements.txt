@@ -1,0 +1,11 @@
+# LOOP-MIND ML/DL layer — spec.md §14-15 (scikit-learn, PyTorch, pandas/NumPy).
+# No model/training code is added until the phase that actually needs it
+# (phase.md Phase 06/13/17) — this only establishes the dependency foundation.
+#
+# torch is installed from the CPU wheel index (no CUDA available assumed for
+# dev); install with:
+#   pip install -r "ML and DL/requirements.txt" --extra-index-url https://download.pytorch.org/whl/cpu
+pandas==3.0.5
+numpy==2.5.3
+scikit-learn==1.9.1
+torch==2.14.0

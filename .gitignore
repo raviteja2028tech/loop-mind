@@ -1,0 +1,77 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.oxlintrc.json
+
+# Environment
+.env
+.env.local
+backend/.env
+
+# Generated data (kept as empty dirs via .gitkeep; content is runtime/dev data)
+databases/sqlite/*.db
+databases/sqlite/*.db-journal
+databases/qdrant/*
+!databases/qdrant/.gitkeep
+storage/resumes/*
+!storage/resumes/.gitkeep
+storage/documents/*
+!storage/documents/.gitkeep
+storage/datasets/*
+!storage/datasets/.gitkeep
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Demo-video working files and rendered output (see demo/README.md)
+demo/_work/
+demo/output/
+
+# --- Hackathon submission: keep the repo to source + docs ---------------------
+# Round 1 / capstone presentation material, decks and spreadsheets
+presentation/
+*.pptx
+*.ppt
+*.xlsx
+company_readiness_FINAL.csv
+6aac310a03938_ppt_template*
+
+# Database backups, local tool state, sync folders
+databases/sqlite/*.bak*
+databases/sqlite/*.db
+.claude/
+.stfolder/
+.pytest_cache/
+.ruff_cache/
+
+# Mobile build artefacts and dependencies
+mobile/node_modules/
+mobile/dist/
+mobile/.expo/
+
+# Generated ML datasets (derived from the application's database; may contain personal records)
+ML and DL/datasets/raw/
+ML and DL/datasets/processed/
+ML and DL/datasets/features/
+
+# Demo-video generated files
+demo/_work/
+demo/output/
+demo/__pycache__/
+*.mp4
+*.webm
+*.wav
+
+# Demo-video tooling stays local (not part of the submission)
+demo/

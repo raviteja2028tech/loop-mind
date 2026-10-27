@@ -1,0 +1,11 @@
+# LOOP-MIND backend — spec.md "FINAL BUILD TECHNOLOGY & AI SPECIFICATION" §2-3
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+pydantic==2.13.5
+pydantic-settings==2.15.0
+SQLAlchemy==2.0.52
+PyJWT==2.14.0
+python-multipart==0.0.32
+# Best-effort public fetch of a student-supplied LinkedIn profile URL
+# during registration (backend/services/registration_service.py).
+requests==2.34.2
