@@ -124,6 +124,12 @@ The prototype demonstration video is shared separately with the hackathon submis
 
 Train and validate the outcome model once enough concluded outcomes exist; replace seed company history with real recruitment data; consent-based placed-student knowledge sharing; a deep-learning layer only if the data justifies it.
 
+## Contributors
+
+- Chiranthan B S Raj
+- Bhuvan Kumar P
+- A Raviteja
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
